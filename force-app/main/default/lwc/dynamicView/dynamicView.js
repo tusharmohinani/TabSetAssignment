@@ -7,6 +7,8 @@ import { updateRecord } from 'lightning/uiRecordApi';
 import {ShowToastEvent} from 'lightning/platformShowToastEvent';
 var forEachTemp=0;
 export default class DynamicView extends NavigationMixin(LightningElement) {
+    
+    //all variables
     condition=true;
     newButton='New Account';
     objectType='Account';
@@ -50,11 +52,14 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
         { label: 'Delete', name: 'delete'}
     ];
     
+    //method call when a program starts
     connectedCallback()
     {
         this.getData();
         this.getAllCustomSObjects();
     }
+    
+    //method to get all objects from apex
     getAllCustomSObjects()
     {
         getAllCustomSObjects()
@@ -69,6 +74,7 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
         });
         
     }
+    //method to get all records and fields of current object
     getData(){
         getData({objectType:this.objectType})
         .then(result=>{
@@ -118,6 +124,8 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
             console.log(error);
         });
     }
+    
+    //method when a active tabset change
     handleActive(event) {
         if(event.target.value=='More')
         {
@@ -130,11 +138,12 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
         }
         
     }
+    //opening a modal of lightning record form
     navigateToNewRecord() {
         this.newRecord=true;
     }
+    //method calls when a user click button for a particular record like edit,view,delete
     handleRowAction( event ) {
-
         const actionName = event.detail.action.name;
         const row = event.detail.row;
         switch ( actionName ) {
@@ -156,7 +165,7 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
                 this.id=row.Id;
                 this.edit=true;
                 break;
-
+                //in case of delete
             case 'delete':
                 var a=[row];
                 deleteRecords({ records: [row]})
@@ -171,6 +180,7 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
             default:
         }
     }
+    //method calls when a select to fields values changed
     handleChange(event)
     {
         // Get the list of the "value" attribute on all the selected options
@@ -189,10 +199,12 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
             }
         });
     }
+    //method to open select fields to display modal
     handleModal()
     {
         this.isModalOpen=true;   
     }
+    //method calls when user click on close or cancel button in modal and closes modal
     closeModal()
     {
         this.edit=false;
@@ -200,6 +212,7 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
         this.isMore=false;
         this.newRecord=false;
     }
+    //when user click on save in modal
     saveModal()
     {
         this.columns=this.selectedFields;
@@ -210,6 +223,7 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
     {
         this.selectedRows=event.detail.selectedRows;
     }
+    //method calls when delete selected buttonn clicks and to delete selected records
     onDeleteSelected()
     {
         deleteRecords({ records: this.selectedRows})
@@ -222,6 +236,7 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
             this.handleShowToastEvent('Error!!','Error while deleting records','Error');
         });
     }
+    //mehtod calls when no of records display combo box changed
     handleComboChange(event)
     {
         this.nOfRecordDisplay=event.detail.value;
@@ -244,11 +259,13 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
             else
                 this.disabledRight=false;
     }
+    //when object changed  in more modal
     handleObjectChange(event)
     {
         this.newObject.label= event.target.options.find(opt => opt.value === event.detail.value).label;
         this.newObject.value=event.target.value;
     }
+    //method call when user select the object in combo box and click on save
     saveObjectModal()
     {
         this.isMore=false;
@@ -261,6 +278,7 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
         temp.push({name: 'More',value:'More'});
         this.tabs=temp;
     }
+    //showing  a toast message
     handleShowToastEvent(title,message,variant)
     {
         this.dispatchEvent(new ShowToastEvent({
@@ -270,6 +288,7 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
             }),
         );
     }
+    //method calls when user select a particular page
     handlePage(event)
     {
         this.currentPage=event.target.label;       
@@ -282,7 +301,7 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
             this.recordsToDisplay=this.data.slice((parseInt(this.currentPage)-1)*parseInt(this.nOfRecordDisplay),parseInt(this.currentPage)*parseInt(this.nOfRecordDisplay));
         }
     }
-
+    //when user click on right button in pagination
     handleRight()
     {
         forEachTemp=0;
@@ -298,6 +317,7 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
         }
         this.disabledLeft=false;
     }
+    //when user click on left button in pagination
     handleLeft()
     {
         forEachTemp=0;
@@ -313,7 +333,7 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
         }
         this.disabledRight=false;
     }
-    
+    //method  to check current page in template
     get checkMethod()
     {
         if(forEachTemp==this.currentShowingPages.length)
@@ -332,22 +352,26 @@ export default class DynamicView extends NavigationMixin(LightningElement) {
             return false;
         }
     }
+    //when user submit the edit form
     handleSubmit(event) 
     {    
         this.edit = false;
         // showing success message
         this.handleShowToastEvent('Update Success!!','Record Updated','success');   
     }
+    //when user submit the edit form then reload the data
     handleSuccess()
     {
         this.getData();
     }
+    //when user submit the new form
     handleSuccessNewRecord(event)
     {
         this.newRecord=false;
         this.handleShowToastEvent('Created!!','Record Created','success');
         this.getData();
     }
+    //when user save the inline edits in datatable
     handleSave(event) 
     {
         const recordInputs =  event.detail.draftValues.slice().map(draft => {
