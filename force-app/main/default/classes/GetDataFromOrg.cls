@@ -1,5 +1,5 @@
 global with sharing class GetDataFromOrg {
-
+    //wrapper classes
     public class WrapperClass
     {
         @AuraEnabled
@@ -14,11 +14,13 @@ global with sharing class GetDataFromOrg {
         @AuraEnabled
         public List<String> label;
     }
+    //method for  delete records
     @AuraEnabled
     public static void deleteRecords(List<sObject> records)
     {
         delete records;
     }
+    //method to get all objects
     @AuraEnabled
     public static WrapperClassObjects getAllCustomSObjects()
     {
@@ -34,6 +36,7 @@ global with sharing class GetDataFromOrg {
         wrapper.label=label;
         return wrapper;
     }
+    //method  to get  field names which is editable and records of that particular object which is passed as parameter
     @AuraEnabled
     public static WrapperClass getData(String objectType)
     {
