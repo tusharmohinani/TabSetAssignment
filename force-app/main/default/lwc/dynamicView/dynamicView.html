@@ -1,4 +1,5 @@
 <template>
+    <!-- tab set code-->
     <lightning-tabset variant="scoped">
         <template for:each={tabs} for:item="tab">
             <lightning-tab label={tab.name} key={tab.value} value={tab.value} onactive={handleActive}>
@@ -20,6 +21,7 @@
         </template>
     </lightning-tabset>
 
+    <!-- fields to display modal-->
     <template if:true={isModalOpen}>
         <!-- Modal/Popup Box LWC starts here -->
         <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
@@ -59,6 +61,7 @@
         </section>
         <div class="slds-backdrop slds-backdrop_open"></div>
     </template>
+    <!-- for showing pagination if data is present--> 
     <template if:true={data}>
         <div style="background-color:white;height:110px">
                 <br/>
@@ -91,6 +94,7 @@
 
         </div>
     </template>
+    <!--modal for more objects you want-->
     <template if:true={isMore}>
         <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
             <div class="slds-modal__container">
@@ -124,7 +128,9 @@
             </div>
         </section>
         <div class="slds-backdrop slds-backdrop_open"></div>
-    </template> 
+    </template>
+    
+    <!-- Lightning Record form in case of edit-->
     <template if:true={edit}>
         <!-- Modal/Popup Box LWC starts here -->
         <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
@@ -155,6 +161,7 @@
         </section>
         <div class="slds-backdrop slds-backdrop_open"></div>
     </template>
+    <!-- lightnning record form in case of a new record-->
     <template if:true={newRecord}>
         <!-- Modal/Popup Box LWC starts here -->
         <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
